@@ -1,13 +1,13 @@
 
-#ifndef CST0XXTOUCHPAD_H
-#define CST0XXTOUCHPAD_H
+#ifndef CST816S_H
+#define CST816S_H
 
 #include "drivers/I2C.h"
 #include "InterruptIn.h"
 #include "DigitalOut.h"
 #include "platform/Callback.h"
 
-class CST0xx
+class CST816S
 {
 public:
     enum event_type
@@ -27,8 +27,8 @@ public:
         uint16_t y;
     };
 
-    CST0xx(mbed::I2C* i2c, PinName interruptPin, PinName resetPin);
-    CST0xx(mbed::I2C* i2c, PinName interruptPin, PinName resetPin, mbed::Callback<void(struct ts_event)> touch_event_callback);
+    CST816S(mbed::I2C* i2c, PinName interruptPin, PinName resetPin);
+    CST816S(mbed::I2C* i2c, PinName interruptPin, PinName resetPin, mbed::Callback<void(struct ts_event)> touch_event_callback);
     
     void init();
     void setCallBack(mbed::Callback<void(struct ts_event)> touch_event_callback);
@@ -40,9 +40,17 @@ protected:
     mbed::InterruptIn _touchInterrupt;
     mbed::DigitalOut _reset;
     mbed::Callback<void(struct ts_event)> _touch_event_callback;
+    /**
+     * Write to registers using I2C. 
+     * @return Return 0 for a successful execution.
+     */ 
     uint16_t i2c_reg_write(uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint16_t length);
+    /**
+     * Read from registers using I2C. 
+     * @return Return 0 for a successful execution.
+     */ 
     uint16_t i2c_reg_read(uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint16_t length);
     void onTouchInterrupt();
 };
 
-#endif // CST0XXTOUCHPAD_H
+#endif // CST816S_H
